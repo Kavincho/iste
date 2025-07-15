@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce - Tu Tienda Online</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-shopping-cart"></i>
+                <span>E-Commerce</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Inicio</a>
+                <a href="#productos" class="nav-link">Productos</a>
+                <a href="#categorias" class="nav-link">Categorías</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-login" onclick="mostrarLogin()">
+                    <i class="fas fa-user"></i>
+                    Iniciar Sesión
+                </button>
+                <button class="btn-cart" onclick="mostrarCarrito()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Bienvenido a tu Tienda Online</h1>
+            <p class="hero-subtitle">Descubre productos increíbles a precios increíbles</p>
+            <button class="btn-primary" onclick="scrollToProductos()">
+                Ver Productos
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="hero-image">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
+    </section>
+
+    <!-- Productos Section -->
+    <section id="productos" class="productos-section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos</h2>
+            
+            <!-- Filtros -->
+            <div class="filtros">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar productos...">
+                    <button onclick="buscarProductos()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="categoria-filtro">
+                    <select id="categoriaSelect" onchange="filtrarPorCategoria()">
+                        <option value="">Todas las categorías</option>
+                        <option value="Electrónicos">Electrónicos</option>
+                        <option value="Ropa">Ropa</option>
+                        <option value="Hogar">Hogar</option>
+                        <option value="Deportes">Deportes</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div class="productos-grid" id="productosGrid">
+                <!-- Los productos se cargarán dinámicamente -->
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Cargando productos...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Iniciar Sesión</h3>
+                <button class="close-btn" onclick="cerrarModal('loginModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="login(event)">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                </form>
+                <p class="form-footer">
+                    ¿No tienes cuenta? 
+                    <a href="#" onclick="mostrarRegistro()">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Registro -->
+    <div class="modal" id="registroModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Crear Cuenta</h3>
+                <button class="close-btn" onclick="cerrarModal('registroModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="registroForm" onsubmit="registrar(event)">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailReg">Email:</label>
+                        <input type="email" id="emailReg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordReg">Contraseña:</label>
+                        <input type="password" id="passwordReg" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Crear Cuenta</button>
+                </form>
+                <p class="form-footer">
+                    ¿Ya tienes cuenta? 
+                    <a href="#" onclick="mostrarLogin()">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Carrito -->
+    <div class="modal" id="carritoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tu Carrito</h3>
+                <button class="close-btn" onclick="cerrarModal('carritoModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="carritoItems">
+                    <!-- Items del carrito se cargarán aquí -->
+                </div>
+                <div class="carrito-total">
+                    <h4>Total: $<span id="carritoTotal">0.00</span></h4>
+                    <button class="btn-primary" onclick="finalizarCompra()">
+                        Finalizar Compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>E-Commerce</h4>
+                    <p>Tu tienda online de confianza</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <a href="#home">Inicio</a>
+                    <a href="#productos">Productos</a>
+                    <a href="#contacto">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-envelope"></i> info@ecommerce.com</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 E-Commerce. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 

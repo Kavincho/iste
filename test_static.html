@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Archivos Estáticos</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div style="padding: 50px; text-align: center;">
+        <h1 style="color: #667eea;">Test de Archivos Estáticos</h1>
+        <p>Si ves este texto en azul, el CSS está funcionando correctamente.</p>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn-primary" onclick="testJavaScript()">
+                <i class="fas fa-check"></i>
+                Probar JavaScript
+            </button>
+        </div>
+        
+        <div id="resultado" style="margin: 20px 0; padding: 10px; border: 1px solid #ccc;"></div>
+    </div>
+    
+    <script src="/static/js/app.js"></script>
+    <script>
+        function testJavaScript() {
+            document.getElementById('resultado').innerHTML = 
+                '<p style="color: green;">✅ JavaScript funcionando correctamente</p>';
+            console.log('Test de JavaScript completado');
+        }
+        
+        // Verificar que el CSS se cargó
+        window.addEventListener('load', function() {
+            const h1 = document.querySelector('h1');
+            const computedStyle = window.getComputedStyle(h1);
+            console.log('Color del H1:', computedStyle.color);
+        });
+    </script>
+</body>
+</html> 
